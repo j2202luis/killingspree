@@ -1,143 +1,81 @@
-import random
-import curses
-import time
+from PIL import Image
+import os
 
-class Character:
-    def __init__(self, name, health, attack, defense, level=1):
-        self.name = name
-        self.health = health
-        self.attack = attack
-        self.defense = defense
-        self.level = level
+def get_animal_details():
+    """
+    Function to gather details about the animal's life and characteristics.
+    """
+    print("Welcome to the Animal Autobiography Generator!")
     
-    def is_alive(self):
-        return self.health > 0
-
-    def take_damage(self, damage, stdscr):
-        damage_taken = max(damage - self.defense, 0)
-        self.health -= damage_taken
-        stdscr.addstr(f"{self.name} takes {damage_taken} damage. Health: {self.health}/{self.max_health}\n")
-        stdscr.refresh()
-        time.sleep(1)
-
-    def attack_enemy(self, enemy, stdscr):
-        damage = random.randint(self.attack - 2, self.attack + 2)
-        stdscr.addstr(f"{self.name} attacks {enemy.name} for {damage} damage.\n")
-        stdscr.refresh()
-        time.sleep(1)
-        enemy.take_damage(damage, stdscr)
-        
-    def heal(self, stdscr):
-        heal_amount = random.randint(5, 10)
-        self.health = min(self.health + heal_amount, self.max_health)
-        stdscr.addstr(f"{self.name} heals for {heal_amount} points. Health: {self.health}/{self.max_health}\n")
-        stdscr.refresh()
-        time.sleep(1)
-
-class Player(Character):
-    def __init__(self, name):
-        super().__init__(name, health=50, attack=10, defense=3)
-        self.max_health = 50
+    # Gather basic information
+    name = input("What is your name? (e.g., Simba, Bella, etc.): ")
+    species = input("What species are you? (e.g., Lion, Dog, Elephant, etc.): ")
+    age = input("How old are you in animal years? ")
+    habitat = input("Where do you live? (e.g., Savanna, Forest, Home, etc.): ")
+    diet = input("What do you like to eat? (e.g., Meat, Vegetation, Mixed, etc.): ")
     
-    def level_up(self, stdscr):
-        self.level += 1
-        self.attack += 3
-        self.defense += 2
-        self.max_health += 10
-        self.health = self.max_health
-        stdscr.addstr(f"{self.name} has leveled up! Now at level {self.level}.\n")
-        stdscr.refresh()
-        time.sleep(1)
-
-class Enemy(Character):
-    def __init__(self, name, level):
-        super().__init__(name, health=30 + (level * 5), attack=8 + level, defense=2 + level, level=level)
-        self.max_health = self.health
-
-    def take_damage(self, damage, stdscr):
-        super().take_damage(damage, stdscr)
-        if not self.is_alive():
-            stdscr.addstr(f"{self.name} has been defeated!\n")
-            stdscr.refresh()
-            time.sleep(1)
-
-def battle(player, enemy, stdscr):
-    stdscr.addstr(f"A wild {enemy.name} appears!\n")
-    stdscr.refresh()
-    time.sleep(1)
+    # Gather favorite activities and accomplishments
+    favorite_activities = input("What are your favorite activities? (Separate with commas): ").split(",")
+    notable_achievements = input("What are your notable achievements? (e.g., Catching a big prey, Winning a race, etc.): ").split(",")
     
-    while player.is_alive() and enemy.is_alive():
-        stdscr.clear()
-        stdscr.addstr(f"{player.name}'s Health: {player.health}/{player.max_health}\n")
-        stdscr.addstr(f"{enemy.name}'s Health: {enemy.health}/{enemy.max_health}\n")
-        stdscr.addstr("\nChoose your action:\n")
-        stdscr.addstr("1: Attack\n")
-        stdscr.addstr("2: Heal\n")
-        stdscr.refresh()
-        choice = stdscr.getch()
-
-        if choice == ord('1'):
-            player.attack_enemy(enemy, stdscr)
-        elif choice == ord('2'):
-            player.heal(stdscr)
-        else:
-            stdscr.addstr("Invalid choice, try again.\n")
-            stdscr.refresh()
-            time.sleep(1)
-            continue
-
-        if enemy.is_alive():
-            enemy.attack_enemy(player, stdscr)
-        else:
-            break
-
-        if player.is_alive():
-            stdscr.addstr(f"{player.name}'s Health: {player.health}/{player.max_health}\n")
-        else:
-            stdscr.addstr(f"{player.name} has been defeated!\n")
-            break
-
-def main(stdscr):
-    curses.curs_set(0)  # Hide cursor
-    stdscr.nodelay(1)   # Non-blocking input
-    stdscr.clear()
-
-    stdscr.addstr("Welcome to the RPG Game!\n")
-    stdscr.refresh()
-    time.sleep(1)
-
-    stdscr.addstr("Enter your character's name: ")
-    stdscr.refresh()
-    player_name = ""
-    while True:
-        char = stdscr.getch()
-        if char == 10:  # Enter key
-            break
-        player_name += chr(char)
-        stdscr.addstr(chr(char))
-        stdscr.refresh()
-
-    player = Player(player_name)
+    # Ask for an optional profile image
+    image_path = input("Enter the path to your picture (or press Enter to skip): ")
     
-    while player.is_alive():
-        enemy_level = random.randint(1, player.level + 1)
-        enemy = Enemy("Goblin", enemy_level)
-        battle(player, enemy, stdscr)
-        
-        if player.is_alive():
-            player.level_up(stdscr)
-            stdscr.addstr("Do you want to continue adventuring? (y/n): ")
-            stdscr.refresh()
-            choice = stdscr.getch()
-            if choice == ord('n'):
-                break
-        else:
-            stdscr.addstr("Game over!\n")
-            break
+    # Store all the gathered information in a dictionary
+    animal_autobiography = {
+        "Name": name,
+        "Species": species,
+        "Age": age,
+        "Habitat": habitat,
+        "Diet": diet,
+        "Favorite Activities": [activity.strip() for activity in favorite_activities],
+        "Notable Achievements": [achievement.strip() for achievement in notable_achievements],
+        "Image Path": image_path if image_path else None  # If no image path provided, keep it as None
+    }
+    
+    return animal_autobiography
 
-    stdscr.addstr("Thank you for playing!\n")
-    stdscr.refresh()
-    time.sleep(2)
+def display_animal_autobiography(animal_autobiography):
+    """
+    Function to display the animal's autobiography in a formatted way.
+    """
+    print("\n--- Animal Autobiography ---\n")
+    print(f"Name: {animal_autobiography['Name']}")
+    print(f"Species: {animal_autobiography['Species']}")
+    print(f"Age: {animal_autobiography['Age']} years")
+    print(f"Habitat: {animal_autobiography['Habitat']}")
+    print(f"Diet: {animal_autobiography['Diet']}")
+    
+    # Display favorite activities
+    print("\nFavorite Activities:")
+    for activity in animal_autobiography["Favorite Activities"]:
+        print(f"- {activity}")
+    
+    # Display notable achievements
+    print("\nNotable Achievements:")
+    for achievement in animal_autobiography["Notable Achievements"]:
+        print(f"- {achievement}")
+    
+    # If image is provided, attempt to display it
+    if animal_autobiography["Image Path"]:
+        if os.path.exists(animal_autobiography["Image Path"]):
+            try:
+                img = Image.open(animal_autobiography["Image Path"])
+                img.show()
+                print("\nProfile picture displayed successfully!")
+            except Exception as e:
+                print(f"Error opening image: {e}")
+        else:
+            print(f"Error: The image path '{animal_autobiography['Image Path']}' does not exist.")
+    else:
+        print("\nNo profile picture provided.")
+
+def main():
+    # Step 1: Gather the animal's autobiography details
+    animal_autobiography = get_animal_details()
+    
+    # Step 2: Display the animal's autobiography
+    display_animal_autobiography(animal_autobiography)
 
 if __name__ == "__main__":
-    curses.wrapper(main)
+    main()
