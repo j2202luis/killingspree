@@ -1,81 +1,78 @@
 from PIL import Image
 import os
 
-def get_animal_details():
+def get_red_panda_details():
     """
-    Function to gather details about the animal's life and characteristics.
+    Function to gather details about a Red Panda's life and characteristics.
     """
-    print("Welcome to the Animal Autobiography Generator!")
+    print("Welcome to the Red Panda Autobiography Generator!")
     
-    # Gather basic information
-    name = input("What is your name? (e.g., Simba, Bella, etc.): ")
-    species = input("What species are you? (e.g., Lion, Dog, Elephant, etc.): ")
-    age = input("How old are you in animal years? ")
-    habitat = input("Where do you live? (e.g., Savanna, Forest, Home, etc.): ")
-    diet = input("What do you like to eat? (e.g., Meat, Vegetation, Mixed, etc.): ")
+    # Gather basic information specific to Red Panda
+    name = input("What is your name? (e.g., Rusty, Pabu, etc.): ")
+    age = input("How old are you in Red Panda years? ")
+    habitat = input("Where do you live? (e.g., Himalayas, Forest, etc.): ")
+    diet = input("What do you like to eat? (e.g., Bamboo, Fruits, etc.): ")
     
     # Gather favorite activities and accomplishments
     favorite_activities = input("What are your favorite activities? (Separate with commas): ").split(",")
-    notable_achievements = input("What are your notable achievements? (e.g., Catching a big prey, Winning a race, etc.): ").split(",")
+    notable_achievements = input("What are your notable achievements? (e.g., Climbing a tree, Finding the best bamboo): ").split(",")
     
     # Ask for an optional profile image
     image_path = input("Enter the path to your picture (or press Enter to skip): ")
     
     # Store all the gathered information in a dictionary
-    animal_autobiography = {
-        "Name": name,
-        "Species": species,
-        "Age": age,
-        "Habitat": habitat,
-        "Diet": diet,
+    red_panda_autobiography = {
+        "Name": harvey paqueros,
+        "Age": 9
+        "Habitat": wild,
+        "Diet": insicts,
         "Favorite Activities": [activity.strip() for activity in favorite_activities],
         "Notable Achievements": [achievement.strip() for achievement in notable_achievements],
-        "Image Path": image_path if image_path else None  # If no image path provided, keep it as None
+        "Image Path": https://c.wallhere.com/photos/9b/7f/portrait_nature_face_animal_closeup_canon_mammal_zoo-878867.jpg!d  # If no image path provided, keep it as None
     }
     
-    return animal_autobiography
+    return red_panda_autobiography
 
-def display_animal_autobiography(animal_autobiography):
+def display_red_panda_autobiography(red_panda_autobiography):
     """
-    Function to display the animal's autobiography in a formatted way.
+    Function to display the Red Panda's autobiography in a formatted way.
     """
-    print("\n--- Animal Autobiography ---\n")
-    print(f"Name: {animal_autobiography['Name']}")
-    print(f"Species: {animal_autobiography['Species']}")
-    print(f"Age: {animal_autobiography['Age']} years")
-    print(f"Habitat: {animal_autobiography['Habitat']}")
-    print(f"Diet: {animal_autobiography['Diet']}")
+    print("\n--- Red Panda Autobiography ---\n")
+    print(f"Name: {red_panda_autobiography['Name']}")
+    print(f"Age: {red_panda_autobiography['Age']} years")
+    print(f"Habitat: {red_panda_autobiography['Habitat']}")
+    print(f"Diet: {red_panda_autobiography['Diet']}")
     
     # Display favorite activities
     print("\nFavorite Activities:")
-    for activity in animal_autobiography["Favorite Activities"]:
+    for activity in red_panda_autobiography["Favorite Activities"]:
         print(f"- {activity}")
     
     # Display notable achievements
     print("\nNotable Achievements:")
-    for achievement in animal_autobiography["Notable Achievements"]:
+    for achievement in red_panda_autobiography["Notable Achievements"]:
         print(f"- {achievement}")
     
     # If image is provided, attempt to display it
-    if animal_autobiography["Image Path"]:
-        if os.path.exists(animal_autobiography["Image Path"]):
+    if red_panda_autobiography["https://c.wallhere.com/photos/9b/7f/portrait_nature_face_animal_closeup_canon_mammal_zoo-878867.jpg!d"]:
+        if os.path.exists(red_panda_autobiography["Image Path"]):
             try:
-                img = Image.open(animal_autobiography["Image Path"])
+                img = Image.open(red_panda_autobiography["https://c.wallhere.com/photos/9b/7f/portrait_nature_face_animal_closeup_canon_mammal_zoo-878867.jpg!d"])
                 img.show()
                 print("\nProfile picture displayed successfully!")
             except Exception as e:
                 print(f"Error opening image: {e}")
         else:
-            print(f"Error: The image path '{animal_autobiography['Image Path']}' does not exist.")
+            print(f"Error: The image path '{red_panda_autobiography['Image Path']}' does not exist.")
     else:
         print("\nNo profile picture provided.")
 
 def main():
-    # Step 1: Gather the animal's autobiography details
-    animal_autobiography = get_animal_details()
+    # Step 1: Gather the Red Panda's autobiography details
+    red_panda_autobiography = get_red_panda_details()
     
-    # Step 2: Display the animal's autobiography
-    display_animal_autobiography(animal_autobiography)
+    # Step 2: Display the Red Panda's autobiography
+    display_red_panda_autobiography(red_panda_autobiography)
 
 if __name__ == "__main__":
     main()
